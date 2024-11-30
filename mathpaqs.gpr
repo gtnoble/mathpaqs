@@ -10,16 +10,16 @@
 project Mathpaqs is
 
    for Source_Dirs use (
-     ".",
-     "algebra",
-     "diff_eq/pde", "diff_eq/sde", "diff_eq/ode",  --  Differential Equations (partial / stochastic / ordinary)
-     "lin_alg", "lin_alg/sparse",                  --  Linear Algebra / sparse matrices
-     "multi",                                      --  Multi-precision integers
-     "numerics",
-     "probas", "random", "stats",
-     "graph"
+     "src/algebra",
+     "src/diff_eq/pde", "src/diff_eq/sde", "src/diff_eq/ode",
+     "src/lin_alg", "src/lin_alg/sparse",
+     "src/multi",
+     "src/numerics",
+     "src/probas", "src/random", "src/stats",
+     "src/graph",
+     "src/examples"
    );
-   for Exec_Dir use ".";
+   for Exec_Dir use "bin";
    for Create_Missing_Dirs use "True";  --  Flips by default the "-p" switch
 
    type Mathpaqs_Build_Mode_Type is ("Debug", "Fast");
@@ -39,7 +39,7 @@ project Mathpaqs is
        "heat.adb",
        "pi_digits.adb",
        "ppm2func.adb",
-       "sim_alea.adb",
+--       "sim_alea.adb",
        "show_floats_limits.adb",
        "three_lakes.adb"
      );
@@ -51,25 +51,29 @@ project Mathpaqs is
 
    type Mathpaqs_Styles_Checks_Type is
       ("Off",
-       "Level_1",
-       "Level_2"
+       "On",
+       "Extra"
       );
    Mathpaqs_Styles_Checks : Mathpaqs_Styles_Checks_Type := external ("Mathpaqs_Styles_Checks", "Off");
 
-   Common_Compiler_Options :=
-    ("-gnatwa",                        --  Warnings switches (a:turn on all info/warnings marked with +)
-     "-gnatwcijkmopruvz.c.p.t.w.x",    --  Warnings switches (run "gnatmake" for full list)
+   Common_Compiler_Options := (
+     "-gnatwa",                        --  Warnings switches (a:turn on all info/warnings marked with +)
+     "-gnatwcijkmopruvz.c.n.p.t.w.x",  --  Warnings switches (run "gnatmake" for full list)
      "-gnatf",                         --  Full errors. Verbose details, all undefined references
      "-gnatq",                         --  Don't quit, try semantics, even if parse errors
      "-gnatQ",                         --  Don't quit, write ali/tree file even if compile errors
-     "-g");                            --  Generate debugging information
+     "-g"                              --  Generate debugging information
+   );
 
-   Debug_Options :=
-    ("-gnata",         --  Assertions enabled
+   Debug_Options := (
+     "-gnata",         --  Assertions enabled
      "-gnato",         --  Enable overflow checking in STRICT mode
      "-gnatVa",        --  Enable all validity checking options
      "-fstack-check",
-     "-fno-inline");
+     "-fno-inline",
+     --
+     "-gnatec=" & project'Project_Dir & "debug.pra"
+   );
 
    Fast_Options := (
      "-O2",
@@ -83,7 +87,7 @@ project Mathpaqs is
    Style_Checks_1 := 
      ("-gnatyaknpr",   --  Style: check all casings: a:attribute, k:keywords, n:package Standard identifiers, p:pragma, r:identifier references
       "-gnatyO",       --  Style: check overriding indicators
-      "-gnatyM120",    --  Style: check line length <= 120 characters
+      "-gnatyM100",    --  Style: check line length <= 100 characters
       "-gnatyx");      --  Style: check x:no extra parens
 
    Style_Checks_2 := 
@@ -94,15 +98,14 @@ project Mathpaqs is
 
    case Mathpaqs_Styles_Checks is
       when "Off"   => null;
-      when "Level_1" => Common_Compiler_Options := Common_Compiler_Options & Style_Checks_1;
-      when "Level_2" => Common_Compiler_Options := Common_Compiler_Options & Style_Checks_1 & Style_Checks_2;
+      when "On"    => Common_Compiler_Options := Common_Compiler_Options & Style_Checks_1;
+      when "Extra" => Common_Compiler_Options := Common_Compiler_Options & Style_Checks_1 & Style_Checks_2;
    end case;
 
    package Compiler is
       case Mathpaqs_Build_Mode is
          when "Debug" =>
             for Default_Switches ("ada") use Common_Compiler_Options & Debug_Options;
-            for Local_Configuration_Pragmas use project'Project_Dir & "debug.pra";
          when "Fast" =>
             for Default_Switches ("ada") use Common_Compiler_Options & Fast_Options;
       end case;
@@ -128,3 +131,4 @@ project Mathpaqs is
    end Ide;
 
 end Mathpaqs;
+

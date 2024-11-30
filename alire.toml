@@ -1,0 +1,70 @@
+authors = [
+"Gautier de Montmollin",
+]
+description = "A collection of mathematical, 100% portable, packages"
+executables = [
+"arenstorf",
+"arithmetic_compression",
+"biomorph",
+"champ_vt",
+"cr_demo",
+"fractal",
+"ppm2func",
+"show_floats_limits",
+"test_beta",
+"test_cholesky",
+"test_copulas",
+"test_ert",
+"test_estimators",
+"test_formulas",
+"test_gamma",
+"test_generic_real_linear_equations",
+"test_normal",
+"test_pareto",
+"test_poisson",
+"test_qr",
+"test_random_performance",
+"test_rsa",
+"test_samples",
+"test_sparse",
+"test_u_rand",
+"test_discrete_random_simulation",
+]
+licenses = "MIT"
+long-description = "![Mathpaqs illustration](https://mathpaqs.sourceforge.io/mathpaqs_files/image001.jpg)\n\nVarious mathematical packages including algebra, finite elements, random variables, probability dependency models, unlimited integers.\n\nKey features of Mathpaqs:\n\n* Standalone\n* Pure Ada\n* Unconditionally portable (*)\n* Tests and demos included\n* **Free**, Open-Source\n\n___\n\n(*) within limits of compiler's provided integer types and target architecture capacity.\n"
+maintainers = [
+"alejandro@mosteo.com",
+]
+maintainers-logins = [
+"mosteo",
+"zertovitch",
+]
+name = "mathpaqs"
+project-files = [
+"mathpaqs.gpr",
+"mathpaqs_test.gpr",
+]
+tags = [
+"algebra",
+"contour",
+"contour-plot",
+"formula-parser",
+"fractal",
+"kutta",
+"linear-algebra",
+"mathematics",
+"matrix",
+"numerics",
+"pareto",
+"poisson",
+"polynomial",
+"probability",
+"random",
+"rational",
+"runge",
+"runge-kutta",
+"statistics",
+]
+version = "20230121.0.0"
+website = "https://mathpaqs.sourceforge.io/"
+
