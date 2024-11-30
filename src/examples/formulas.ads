@@ -14,9 +14,9 @@
 --  Latest version may be available at:
 --      home page:     http://mathpaqs.sf.net/
 --      project page:  http://sf.net/projects/mathpaqs/
---      mirror:        https://github.com/svn2github/mathpaqs
+--      mirror:        https://github.com/zertovitch/mathpaqs
 
--- Copyright (c) Gautier de Montmollin 2015 .. 2016
+--  Copyright (c) Gautier de Montmollin 2015 .. 2024
 --
 --  Permission is hereby granted, free of charge, to any person obtaining a copy
 --  of this software and associated documentation files (the "Software"), to deal
@@ -36,15 +36,19 @@
 --  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 --  THE SOFTWARE.
 --
--- NB: this is the MIT License, as found 2-May-2010 on the site
--- http://www.opensource.org/licenses/mit-license.php
+--  NB: this is the MIT License, as found 2-May-2010 on the site
+--  http://www.opensource.org/licenses/mit-license.php
 
--- TO DO:
+--  TO DO:
 --   - implement user functions
+--   - replace the recursion with right operands on each priority level
+--       (term, factor, ...) by a WHILE loop; remove `Left_assoc`
+--       that becomes consequently unnecessary. See for instance the
+--       HAC compiler for a correct implementation. 
 --   - (never-ending) improve Simplify (see misses at Test_Formulas)
 
 with Ada.Finalization;
-with Ada.Strings.Unbounded;             use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded;
 with Ada.Text_IO;
 
 generic
@@ -68,9 +72,9 @@ package Formulas is
   ---------------------------------------------------
 
   procedure Parse (f : out Formula; s : String);
-  function Parse (s : String) return Formula;  --  NB: a bit slower than the procedure
-  procedure Parse (f : out Formula; u : Unbounded_String);
-  function Parse (u : Unbounded_String) return Formula;  --  NB: a bit slower than the procedure
+  function Parse (s : String) return Formula;
+  procedure Parse (f : out Formula; u : Ada.Strings.Unbounded.Unbounded_String);
+  function Parse (u : Ada.Strings.Unbounded.Unbounded_String) return Formula;
 
   function Evaluate (f : Formula; payload : Payload_type) return Real;
 
@@ -118,11 +122,11 @@ package Formulas is
 
   type Character_Set is array (Character) of Boolean;
 
-  -- Custom variables or functions always begin with a letter:
+  --  Custom variables or functions always begin with a letter:
   letters  : constant Character_Set :=
     ('a' .. 'z' | 'A' .. 'Z' => True, others => False);
 
-  -- Set of following characters in custom variables or functions names is defined here:
+  --  Set of following characters in custom variables or functions names is defined here:
   following_character  : constant Character_Set :=
     ('a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '$' | '.' => True, others => False);
 
@@ -134,7 +138,7 @@ private
                  --                                      1 argument:
                  moins_una, plus_una,
                  par, croch, accol,
-                 -- vvv begin of built-in functions
+                 --  vvv begin of built-in functions
                  abso, sign, step,
                  round, trunc, floor, ceiling,
                  expn, logn,
@@ -143,7 +147,7 @@ private
                  sh, arcsinh, ch, arccosh, th, arctanh,
                  --                                      2 arguments:
                  min, max,
-                 -- ^^^ end of built-in functions
+                 --  ^^^ end of built-in functions
                  moins, plus, sur, fois, puiss);
 
   subtype Unary is S_Form range moins_una .. arctanh;
@@ -156,7 +160,7 @@ private
     case s is
       when nb  =>  n : Real;
       when pi  =>  null;
-      when var =>  v : Unbounded_String;
+      when var =>  v : Ada.Strings.Unbounded.Unbounded_String;
       when Unary | Binary => left, right : p_Formula_Rec;
     end case;
   end record;

@@ -12,6 +12,7 @@ project Mathpaqs_Test is  --  Check mathpaqs.gpr for details
      "src/test",
      "src/test/algebra",
      "src/test/lin_alg",
+     "src/test/lin_alg/sparse",
      "src/test/multi",
      "src/test/numerics",
      "src/test/probas",

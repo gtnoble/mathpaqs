@@ -65,6 +65,6 @@ tags = [
 "runge-kutta",
 "statistics",
 ]
-version = "20230121.0.0"
+version = "20241130.0.0"
 website = "https://mathpaqs.sourceforge.io/"
 
