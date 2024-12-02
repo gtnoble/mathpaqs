@@ -712,8 +712,12 @@ package body Generic_Real_Linear_Equations is
     L : Real_Matrix ( A'Range(1), A'Range(2) ) := (others=>(others=>0.0)) ;
     SUM : Real;
   begin
+    if (A'First(2) <= Integer'First) then
+      raise Matrix_Data_Error with "The first column index must be greater than the minimum integer to avoid underflow";
+    end if;
+
     if A'Length(1) /= A'Length(2) then
-      raise Matrix_Data_Error ;
+      raise Matrix_Data_Error with "Matrix must be square";
     end if;
     for I in A'Range(1) loop          -- check A for being symmetric
       for J in A'First(2)-A'First(1)+I+1 .. A'Last(2) loop

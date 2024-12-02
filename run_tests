@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -e
+
+for test_file in bin/test/test*;
+do
+  ./$test_file
+done
